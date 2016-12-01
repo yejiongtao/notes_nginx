@@ -1,0 +1,110 @@
+1. Nginx
+	three dominated web servers
+		Apache, Microsoft IIS, Nginx
+
+	reasons to use Nginx
+		extremely fast
+		it can be used to take care of routing traffic to the back end intelligently
+			which will accelerate your application
+		it has a straightforward software load balancer
+			setting up a hardware load balancer is costly
+		it scales well
+			scalibility and performance are not the same problem
+			Apache and IIS servers are not suitable for large amount of conenctions due to their architechture
+				Nginx is event-driven, similar to Node.js, which makes it scalable
+		you can reconfigure and upgrade it on the fly
+		affordable to install and maintain
+			it performs pretty well even on servers with a very low hardware footprint
+		easy to use
+
+2. main features of Nginx
+	more than just a web server
+		Nginx can be considered to be an event-based reverse proxy server
+		reverse proxy
+			retrieves resources from the servers on behalf of a client
+			can be helpful to offload the number of requests that the actual web server ends up handling
+
+	modular design
+		extremely extensible due to its support for plug-ins
+		you can rebuild Nginx from source and include or exclude the modules that you don't need
+
+	asynchronous web server
+		while IIS and Apache like to spin new threads per connection, which are blocking in nature
+
+	reverse proxy and load balancing capability
+		it analyzes the request based on its URI and decides how to proceed with it
+	
+	low resource requirement and consumption
+		while other web servers typically allow a simple plug-and-play architecture for plug-ins using configuration files
+			Nginx requires a recompilation of the source with required modules
+			every module is loaded directly inside of an Nginx process
+
+	multiple protocol support
+		HTTP(S), WebSocket, IMAP, POP3, SMTP
+
+	SSL termination
+		since decrypting takes time, when using Nginx as a load balancer, you can terminate SSL at Nginx, i.e. relaying requests to other web servers without SSL
+	
+	HTTP video streaming using MP4/FLV/HDS/HLS
+		video streaming is a very IO-intensive process
+		and Nginx is good at IO due to its asynchronism
+	
+	extended monitoring and logging
+		error log	you can configure it to log based on its levels
+		access log	you can change the fields you would like to log
+
+	upgrades without downtime
+		you just use some commands to run some newer worker processes with new configurations loaded to them, and new requests will be sent to the new workers
+	
+3. enterprise features of Nginx Plus
+	advanced HTTP and TCP load balancing
+		there are four methods of load balancing Nginx
+			Round-Robin, Least Connections, Generic Hash, IP Hash
+		one more in Nginx Plus
+			least time
+	
+	session persistence
+		when you have multiple servers, it might not be easy to share the session data
+			which means if a request from a logged-in client goes to a different server, a reauthentication will be required
+		Nginx Plus solves this
+	
+	content caching enhanced capabilities
+		Nginx Plus can cache content in the local disks and served as if it is coming from the origin
+		it also allows purging of cache, to avoid sending older files
+	
+	application health checks
+		continually test the upstream servers and instruct Nginx Plus to avoid servers that have failed
+		could be one of the biggest reasons to use Nginx Plus
+	
+	HTTP Live Streaming (HLS) and Video on Demand (VOD)
+		other than progressive downloads, Nginx Plus provides adaptive streaming
+		and also bandwidth management for MP4 media
+	
+	live activity monitoring
+		a GUI
+	
+4. Nginx vs Apache
+	Nginx as front end server and Apache in the back end gives you the best of both worlds
+	Aoache has built-in support for PHP, Python, Perl and many other languages
+		Nginx almost always requires extra efforts to work with these languages
+
+5. installing Nginx
+	some basic utilities you'll need ('yum install' on CentOS)
+		Lynx	a text based browser
+		wget	a text based downloader that will help download files
+		ssh	a secure shell to allow remote login
+	
+	install Nginx pre-built package
+		add Nginx repository to the server repository list
+			create a file named nginx.repo inside /etc/yum.repos.d
+			add the following to nginx.repo
+				[nginx]
+				name=nginx repo
+				baseurl=http://nginx.org/packages/centos/7/$basearch
+				pgpcheck=0
+				enabled=1
+		install it
+			# yum install nginx
+
+6. Nginx folder stucture
+	
