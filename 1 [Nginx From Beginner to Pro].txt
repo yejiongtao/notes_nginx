@@ -90,7 +90,9 @@
 
 5. installing Nginx
 	some basic utilities you'll need ('yum install' on CentOS)
-		Lynx	a text based browser
+		yum update	update the packages that are installed by default
+		nano
+		Lynx	a text based browser, lynx http://localhost
 		wget	a text based downloader that will help download files
 		ssh	a secure shell to allow remote login
 	
@@ -107,4 +109,21 @@
 			# yum install nginx
 
 6. Nginx folder stucture
-	
+	# nginx -V	// shows all Nginx configuration details and its version
+	using the Package Manager-based installation
+		/etc/nginx
+			where Nginx is installed
+			nginx.conf	has the web server configuration details
+			mine.types	contains all the mime types that are enabled on the web server
+			fastcgi_params	the fastcgi configuration details
+		
+		/usr/sbin/nginx
+			the Nginx executable
+		
+		/usr/share/nginx/html/
+			the document root directory by default
+
+		/var/log/nginx/
+			where access.log and error.log stay
+		
+

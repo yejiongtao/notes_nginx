@@ -1,0 +1,68 @@
+1. compile and install
+	a tip
+		every time you recompile it, change something in the source it self, so that you can easy tell whether the newest version is running
+			e.g. modify the default index page
+	
+	prerequisites
+		# groupadd -r nginx
+		# useradd -r nginx -g nginx
+
+	you can write a script to configure
+		export BUILD_DIR=/{path of the source dir}
+		export NGINX_DIR=/etc/nginx
+		export SBIN_DIR=/usr/sbin
+		export PID_DIR=/var/run
+		export LOCK_DIR=/var/run
+		export LOG_DIR=/var/log/nginx
+		export RUN_DIR=/var/run
+		export CACHE_DIR=/var/cache
+
+		cd ${BUILD_DIR}
+		./configure \
+			--prefix=${NGINX_DIR} \
+			--user=nginx \
+			--group=nginx \
+			--sbin-path=${SBIN_PATH}/nginx \
+			--conf-path=${NGINX_DIR}/nginx.conf \
+			--pid-path=${PID_DIR}/nginx.pid \
+			--lock-path=${LOCK_DIR}/nginx.lock \
+			--error-log-path=${LOG_DIR}/error.log \
+			--http-log-path=${LOG_DIR}/access.log \
+			--http-client-body-temp-path=${CACHE_DIR}/client_body_temp \
+			--http-fastcgi-temp-path=${CACHE_DIR}/fastcgi_temp \
+			--with-http_gzip_static_module \
+			--with-http_stub_status_module \
+			--with-http_ssl_module \
+			--with-pcre \
+			--with-file-aio \
+			--with-http_realip_module \
+			--without-http_scgi_module \
+			--without-http_uwsgi_module \
+			--without-http_proxy_module \
+	
+	go
+		# chmod u+x scripted
+		# ./scripted
+		# make
+		# make install
+	
+	if you fail
+		use journalctl to check the journal
+	
+2. enable Nginx service on reboot
+	# sudo wget -O /etc/init.d/nginx https://gist.githubusercontent.com/sairam/5892520/raw/b8195a71e944d46271c8a49f2717f70bcd04bf1a/etc-init.d-nginx
+	# sudo chmod +x /etc/init.d/nginx
+	# chkconfig --add nginx
+	# chkconfig --level 345 nginx on
+
+3. firewall configuration (on CentOS)
+	# firewall-cmd --permanent --add-port=80/tcp
+	# firewall-cmd --reload
+
+4. Amazon Elastic Compute Cloud (EC2)
+	http://aws.amazon.com/free
+	you can host a t2.micro server free for one year
+	access via ssh
+
+5. Nginx core directives
+	

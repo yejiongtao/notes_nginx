@@ -1,0 +1,114 @@
+1. installing Nginx from source
+	why bother
+		when you need extra functionality or drop an existing one
+		when you want a fresh installation of Nginx with all the customization built in
+		to configure Nginx with third-party modules
+	
+	download
+		# wget http://nginx.org/download/nginx-1.10.2.tar.gz
+		# tar xzf nginx-1.10.2.tar.gz
+	
+	source
+		auto
+			contains different configuration options, 
+			like 'modules' file for modules those will be installed by default, 'options' file that include different configuration options, etc
+		conf
+			contains Nginx configuration files like nginx.conf and fastcgi.conf
+		configure
+			contains all the configuration details and parameters that are required to compile Nginx. 
+			The output of this file will create a Makefile
+		contrib
+			contains the geo2nginx module
+		html
+			contains the default index.html and 50x.html file
+		src
+			the source code of nginx, html, mail, etc
+		man
+			all the manual pages for Nginx
+
+	prepare development tools
+		# yum group list	// list the available groups
+		# yum group info "development tools"
+		# yum group install "development tools"
+		# yum update
+		# gcc --version
+		# make --version
+
+	install dependent packages
+		pcre and pcre-devel
+			Perl Compatible Regular Expression, used to implement regular expression pattern matching
+		OpenSSL and openssl-devel
+			needed for Nginx SSL modules
+		zlib and zlib-devel
+			used by Nginx in gzip module for compression
+		
+	compile Nginx
+		the configure script
+			./configure --help	to see available configuration parameters
+		
+		compile-time options
+			Nginx users and groups
+				ensure Nginx worker process executes under a particular user
+					it's necessary to create a non-privileged user with a strong password
+				can be changed by editing the nginx.conf file
+				default is empty
+					while the Package Manager-based installation will create a user and a group named nginx or www
+				./configure --user=nginx --group=nginx
+			
+			Nginx configuration paths options
+				can be changed by editing the nginx.conf file
+				--prefix
+					default is /usr/local/nginx
+					Package Manager-based is /etc/nginx
+				--sbin-path
+					default is /usr/local/nginx/sbin/nginx
+					Package Manager-based is /usr/sbin/nginx
+				--conf-path
+					default is /usr/local/nginx/conf
+					Package Manager-based is /etc/nginx
+				--pid-path
+					default is /usr/local/nginx/logs
+					Package Manager-based is /var/run
+				--lock-path
+					default is /usr/local/nginx/logs
+					Package Manager-based is /var/run
+			
+			Nginx log path options
+				--error-log-path
+				--http-log-path
+					default is /usr/local/nginx/logs/
+					Package Manager-based is /log/nginx/
+				--http-client-body-temp-path
+				--http-fastcgi-temp-path
+				--http-uwsgi-temp-path
+				--http-scgi-temp-path
+					default is /usr/local/nginx/logs/
+					Package Manager-based is /var/cache/nginx/
+			
+			Nginx modules
+				some modules are disabled by default, to enable them
+					--with-http<module-name>
+				some are enabled by default, to disable them
+					--without-http<module-name>
+			
+			optimization modules
+				can be used during compilation such as using a specific C cimpiler or compiling Nginx for a pecific CPU architecture
+				--with-cc=PATH
+				--with-cpu-opt=CPU
+			
+			prerequisite modules
+				such as PCRE, MD5, zlib, OpenSSL
+				you can with some paramters to enable/disable or configure them
+			
+			other options
+				--without-http
+				--without-http-cache
+				--with-threads
+				--with-file-aio
+				--with-ipv6
+				--add-module=PATH	// to add a third-party module
+				--with-debug		// enables debug logging
+			
+			third-party modules
+				https://www.nginx.com/resources/wiki/modules
+			
