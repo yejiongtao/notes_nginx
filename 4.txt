@@ -1,0 +1,68 @@
+1. default directives
+	conf.d folder
+		example_ssl.conf	# fully commented out and not used until you require SSL
+		defualt.conf
+			# remember it's actually nested inside 'http'
+			
+			# server block can be set in multiple contexts (http, upstream, mail, stream)
+			# multiple declarations of server directive adjacent to each other are allowed
+			# it represents a 'virtual server', so that you can have multiple web apps running on the same machine
+			server {			
+				listen 80;		# can listen on a specific IP
+				server_name localhost;	# can use wildcards with some rules
+
+				#charset koi8-r;
+				#access_log /var/log/nginx/log/host.access.log main;
+
+				location / {	# you can have different location directives for different paths
+					root /etc/nginx/html;
+						# to return /image/myimage.jpg instead of fully qualified path /etc/nginx/html/image/myimage.jpg
+					index index.html index.htm;
+						# the files to return to the client when the file name is not specified
+				}
+				location ~* \.(png|jpg|jpeg)$ {		# match the regular expression
+					root /etc/nginx/html;
+						# the same as the last location directive
+						# can be pulled out to the server context
+					expires max;
+						# tell the browser to cache these
+					try_files $uri $uri/ /nginx.png
+						# try the file list until one exists
+				}
+
+				#error_page 404 /404.html;
+
+				# redirect server error pages to the static page /50x.html
+				#
+				error_page 500 502 503 504 /50x.html;
+				location = /50x.html {
+					root /usr/share/nginx/html;
+				}
+
+				# proxy the PHP scripts to Apache listening on 127.0.0.1:80
+				#
+				#location ~ \.php$ {
+				#	proxy_pass http://127.0.0.1;
+				#}
+
+				# pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+				#
+				#location ~ \.php$ {
+				#	root html;
+				#	fastcgi_pass 127.0.0.1:9000;
+				#	fastcgi_index index.php;
+				#	fastcgi_param SCRIPT_FILENAME /scripts$fastcgi_script_name;
+				#	include fastcgi_params;
+				#}
+
+				# deny access to .htaccess files, if Apache's document root
+				# concurs with nginx's one
+				#
+				#location ~ /\.ht {
+				#	deny all;
+				#}
+			}
+		
+
+
+

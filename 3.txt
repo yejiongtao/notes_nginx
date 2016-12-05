@@ -64,5 +64,51 @@
 	you can host a t2.micro server free for one year
 	access via ssh
 
-5. Nginx core directives
-	
+5. Nginx core directives (nginx.conf)
+	available context
+		main, events, http, server, location, upstream, if, stream, mail, etc
+
+	default
+		# the whole body could be referred to as the main context
+
+		user nginx;		# user <user_name> <group_name>
+		worker_processes 1;	
+			# default is 1, can be set to 'auto' to ask Nginx to detect the number of cores
+
+		error_log /var/log/nginx/error.log warn;
+			# error_log directive can be applied in multiple contexts like main, http, mail, stream, server, and location
+			# info, notice, warn, error, crit, alert, emerg
+			# setting the level to info is not recommended in production. use warn or error
+
+		pid /var/run/nginx.pid;
+			# where to log the pid of the master process
+
+		events {	# events context, can only be declared once in the main context
+			worker_connections 1024;	# the defualt usually suffice
+			multi_accept on;		
+				# by default, off, meaning a worker process will accept one new connection at a time
+				# it's a good idea to turn it on
+		}
+
+		http {		# the heart of the configuration system for an Nginx web server
+			include /etc/nginx/mime.types;
+				# mime types describe the media type of content, guiding the browser to render the content appropriately, instead of simply downloading the file
+
+			default_type application/octet-stream;
+				# the default MIME type if nginx fails to find one in mime.types
+
+			log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+				'$status $body_bytes_sent "$http_referer" '
+				'"$http_user_agent" "$http_x_forwarded_for"';
+
+			access_log /var/log/nginx/access.log main;	# main is the name of the log_format
+
+			sendfile on;	# means that the call will not block on disk I/O
+				# it's a good idea to turn it on
+
+			#tcp_nopush on;
+			keepalive_timeout 65;	# on a busy server, you can choose to reduce this timeout
+			#gzip on;		# it's recommended to turn it on
+			include /etc/nginx/conf.d/*.conf;
+		}
+
